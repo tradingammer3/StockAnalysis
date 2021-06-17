@@ -1,0 +1,30 @@
+SSH key Setup 
+https://docs.github.com/en/github/authenticating-to-github/connecting-to-github-with-ssh/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent
+
+git clone git@github.com:tradingammer3/StockAnalysis.git
+
+ls -la
+git status
+
+git add . (will track all the files)
+git add FundamentalAnalysis.py
+
+git commit -m "updated Python Libraries" -m "Updated in the FundamentalAnalysis.py file"
+
+
+
+before git push you need to prove that its your account
+ssh-keygen -t rsa -b 4096 -C "tradingammer3@gmail.com"
+ls | grep acc
+cat acc.pub
+cat c:/users/aamerali.sayyed/acc.pub | clip
+
+Add the key to github
+Add the key to SSH Agent
+
+git push origin main
+
+
+git init
+git remote add origin
+git remote remove origin
