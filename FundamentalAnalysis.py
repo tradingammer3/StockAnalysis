@@ -9,10 +9,14 @@ import pandas as pd
 import numpy as np
 import FundamentalAnalysis as fa
 import StockPeers as peers
+import datetime
 
 
 ticker = "AAPL"
 api_key = "802b63ba7f7d06305d7ca936e6f3b2ca"
+
+year = datetime.datetime.today().year
+yearOfAnalysis = (list(range(year , year - 5 , -1)))
 
 # Show the available companies
 companies = fa.available_companies(api_key)
@@ -34,12 +38,30 @@ for stock in stockCompetitorsList:
     
     
 
-
 # Collect recent company quotes
 quotes = fa.quote(ticker, api_key)
 
+# Collect recent quotes for all Peer Company
+stockPeerQuote = pd.DataFrame()
+stockPeerQuoteAll = pd.DataFrame()
+for stock in stockCompetitorsList:
+    stockPeerQuote = fa.quote(stock , api_key)
+    stockPeerQuoteAll = pd.concat([stockPeerQuoteAll , stockPeerQuote] , axis = 1)
+    
+
 # Collect market cap and enterprise value
 entreprise_value = fa.enterprise(ticker, api_key)
+
+# Collect recent market cap and enterprise values for all Peer Company
+stockPeerEP = pd.DataFrame()
+stockPeerEPAll = pd.DataFrame()
+for stock in stockCompetitorsList:
+    stockPeerEP = pd.DataFrame(fa.enterprise(stock , api_key))
+    stockPeerEP = stockPeerEP.iloc[: , 0:6]
+    stockPeerEPAll = pd.concat([stockPeerEPAll , stockPeerEP], axis = 1)
+    
+
+
 
 # Show recommendations of Analysts
 ratings = fa.rating(ticker, api_key)
