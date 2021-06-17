@@ -64,6 +64,7 @@ for stock in stockCompetitorsList:
 
 
 # Show recommendations of Analysts
+# Not good to have for all stockPeers . Should CHange ticker and do the Analysis Accordingly
 ratings = fa.rating(ticker, api_key)
 
 # Obtain DCFs over time
