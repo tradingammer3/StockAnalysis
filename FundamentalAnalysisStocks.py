@@ -10,6 +10,7 @@ import numpy as np
 import FundamentalAnalysis as fa
 import StockPeers as peers
 import datetime
+import requests
 
 
 ticker = "AAPL"
@@ -83,18 +84,12 @@ for stock in stockCompetitorsList:
     
 
 # Obtain DCFs for all Peers Quarterly 
-dcfPeerQ = pd.DataFrame()
-dcfPeerQAll = pd.DataFrame()
-for stock in stockCompetitorsList:
-    dcfPeerQ = fa.discounted_cash_flow(stock, api_key, period="quarter")
-    dcfPeerQ = dcfPeerQ.iloc[: , 0:6]
-    dcfPeerQ['symbol'] = stock
-    dcfPeerQAll = pd.concat([dcfPeerQAll , dcfPeerQ], axis = 1)
 
 
 # Collect the Balance Sheet statements
 balance_sheet_annually = fa.balance_sheet_statement(ticker, api_key, period="annual")
 balance_sheet_quarterly = fa.balance_sheet_statement(ticker, api_key, period="quarter")
+
 
 # Collect the Income Statements
 income_statement_annually = fa.income_statement(ticker, api_key, period="annual")
@@ -103,6 +98,10 @@ income_statement_quarterly = fa.income_statement(ticker, api_key, period="quarte
 # Collect the Cash Flow Statements
 cash_flow_statement_annually = fa.cash_flow_statement(ticker, api_key, period="annual")
 cash_flow_statement_quarterly = fa.cash_flow_statement(ticker, api_key, period="quarter")
+
+
+# To call balance sheet for all peers in one go call class FinancialQuarterly
+
 
 # Show Key Metrics
 key_metrics_annually = fa.key_metrics(ticker, api_key, period="annual")
