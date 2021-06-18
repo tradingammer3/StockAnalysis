@@ -13,7 +13,8 @@ class StockPeers():
 
     def __init__(self , stock):
         self._stock = stock
-        self.api_key = '802b63ba7f7d06305d7ca936e6f3b2ca'
+        # api_key = "802b63ba7f7d06305d7ca936e6f3b2ca"
+        api_key   = "08bfbdf1fe1e7e8908c2fcc0be1e81ff"
         
     def stockPeersList(self):
         url = f'https://financialmodelingprep.com/api/v4/stock_peers?symbol={self._stock}&apikey={self.api_key}'

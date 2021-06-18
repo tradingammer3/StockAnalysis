@@ -13,7 +13,8 @@ import datetime
 
 
 ticker = "AAPL"
-api_key = "802b63ba7f7d06305d7ca936e6f3b2ca"
+# api_key = "802b63ba7f7d06305d7ca936e6f3b2ca"
+api_key = "08bfbdf1fe1e7e8908c2fcc0be1e81ff"
 
 year = datetime.datetime.today().year
 yearOfAnalysis = (list(range(year , year - 5 , -1)))
@@ -70,6 +71,26 @@ ratings = fa.rating(ticker, api_key)
 # Obtain DCFs over time
 dcf_annually = fa.discounted_cash_flow(ticker, api_key, period="annual")
 dcf_quarterly = fa.discounted_cash_flow(ticker, api_key, period="quarter")
+
+# Obtain DCFs for all Peers annually
+dcfPeerA = pd.DataFrame()
+dcfPeerAAll = pd.DataFrame()
+for stock in stockCompetitorsList:
+    dcfPeerA = fa.discounted_cash_flow(stock, api_key, period="annual")
+    dcfPeerA = dcfPeerA.iloc[: , 0:6]
+    dcfPeerA['symbol'] = stock
+    dcfPeerAAll = pd.concat([dcfPeerAAll , dcfPeerA], axis = 1)
+    
+
+# Obtain DCFs for all Peers Quarterly 
+dcfPeerQ = pd.DataFrame()
+dcfPeerQAll = pd.DataFrame()
+for stock in stockCompetitorsList:
+    dcfPeerQ = fa.discounted_cash_flow(stock, api_key, period="quarter")
+    dcfPeerQ = dcfPeerQ.iloc[: , 0:6]
+    dcfPeerQ['symbol'] = stock
+    dcfPeerQAll = pd.concat([dcfPeerQAll , dcfPeerQ], axis = 1)
+
 
 # Collect the Balance Sheet statements
 balance_sheet_annually = fa.balance_sheet_statement(ticker, api_key, period="annual")
