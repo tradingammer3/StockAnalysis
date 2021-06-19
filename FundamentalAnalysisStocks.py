@@ -100,7 +100,8 @@ cash_flow_statement_annually = fa.cash_flow_statement(ticker, api_key, period="a
 cash_flow_statement_quarterly = fa.cash_flow_statement(ticker, api_key, period="quarter")
 
 
-# To call balance sheet for all peers in one go call class FinancialQuarterly
+# To call balance sheet , Income Statement , cash flow statement quarterly
+# for all peers in one go call class FinancialQuarterly
 
 
 # Show Key Metrics
