@@ -13,7 +13,7 @@ import datetime
 import requests
 
 
-ticker = "AAPL"
+ticker = "AMZN"
 # api_key = "802b63ba7f7d06305d7ca936e6f3b2ca"
 api_key = "08bfbdf1fe1e7e8908c2fcc0be1e81ff"
 
