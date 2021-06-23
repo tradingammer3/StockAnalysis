@@ -108,6 +108,8 @@ cash_flow_statement_quarterly = fa.cash_flow_statement(ticker, api_key, period="
 key_metrics_annually = fa.key_metrics(ticker, api_key, period="annual")
 key_metrics_quarterly = fa.key_metrics(ticker, api_key, period="quarter")
 
+key_metrics_annually.to_csv('key metrics.csv')
+
 # Show a large set of in-depth ratios
 financial_ratios_annually = fa.financial_ratios(ticker, api_key, period="annual")
 financial_ratios_quarterly = fa.financial_ratios(ticker, api_key, period="quarter")
