@@ -2,7 +2,7 @@ import requests
 import pandas as pd
 import numpy as np
 
-class MomentumStrategy():
+class MeanReversionStrategy():
     
     
     def __init__(self , stock):
@@ -11,40 +11,31 @@ class MomentumStrategy():
         self.api_key   = "08bfbdf1fe1e7e8908c2fcc0be1e81ff"
         
     
-    def momentumStrategy(self):
+    def meanReversionStrategy(self):
         url = f'https://financialmodelingprep.com/api/v3/historical-price-full/{self._stock}?apikey={self.api_key}'
         stockPrices = requests.get(url).json()
         stockPrices = stockPrices['historical'][0:1200]
         stockPrices = pd.DataFrame.from_dict(stockPrices)
         stockPrices = stockPrices.set_index('date')
+        stockPrices['20d'] = stockPrices['close'].rolling(20).mean()
         stockPrices = stockPrices.iloc[::-1]
         
+        
         stockPrices['returns'] = np.log(stockPrices['close'] / stockPrices['close'].shift(1))
-        stockPrices['movement'] = stockPrices['close'] - stockPrices['close'].shift(1)
+        stockPrices['difference'] = stockPrices['close'] - stockPrices['20d']
         
-        stockPrices['up'] = np.where( (stockPrices['movement'] > 0) , stockPrices['movement'] , 0)
-        stockPrices['down'] = np.where((stockPrices['movement'] < 0) , stockPrices['movement'] , 0)
-        
-        up = stockPrices['up'].rolling(14).mean()
-        down = stockPrices['down'].abs().rolling(14).mean()
-        
-        RS = up / down
-        RSI = 100 - (100 / (1 + RS))
-        RSI = RSI.rename('RSI')
-
-        
-        stockPricesNew = pd.merge(stockPrices , RSI , left_index = True , right_index=True)
-        stockPricesNew['long'] = np.where((stockPricesNew['RSI'] < 30) , 1 , np.nan )
-        stockPricesNew['long'] = np.where((stockPricesNew['RSI'] > 70) , 0 , stockPricesNew['long'] )
-        stockPricesNew['long'].ffill(inplace = True)
-        stockPricesNew['gain_loss'] = stockPricesNew['long'].shift(1) * stockPricesNew['returns']
-        stockPricesNew['total_gain_loss'] = stockPricesNew['gain_loss'].cumsum()
-        return stockPricesNew
+        stockPrices['long'] = np.where((stockPrices['difference'] < -3) , 1 , np.nan)
+        stockPrices['long'] = np.where((stockPrices['difference'] * stockPrices['difference'].shift(1)  < 0) , 0 , stockPrices['long'])
+        stockPrices['long'] = stockPrices['long'].ffill().fillna(0)
+        stockPrices['gain_loss'] = stockPrices['long'].shift(1) * stockPrices['returns']
+        stockPrices = stockPrices.dropna(subset=['20d'])
+        stockPrices['total_gain_loss'] = stockPrices['gain_loss'].cumsum()
+        return stockPrices
     
     
     
 
-stockMomentum = MomentumStrategy('AAPL')
-stockMomentumDecision = MomentumStrategy.momentumStrategy(stockMomentum)
+stockMeanStrategy = MeanReversionStrategy('AAPL')
+stockMeanDecision = MeanReversionStrategy.meanReversionStrategy(stockMeanStrategy)
         
         
